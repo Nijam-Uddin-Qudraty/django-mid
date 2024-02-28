@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% block body %}
+{% load static %}
+<h1>home</h1>
+
+
+<div class='d-flex flex-wrap p-5 align-items-center'>
+    <div class="col-6">
+        <h1>Welcome To QCar</h1>
+        <p> Step into a world of automotive sophistication at our car shop. Nestled in the heart of innovation, our showroom is a visual feast, showcasing an array of vehicles that redefine driving pleasure. From sleek sedans to robust SUVs, each model is a testament to design excellence and unparalleled performance. Immerse yourself in the luxury and cutting-edge technology that our curated collection offers. Our commitment to providing a seamless and exhilarating car-buying experience sets us apart. Explore the road ahead with confidence and style, as our team ensures that every visit to our dealership is a journey into automotive excellence.</p>
+    </div>
+    <div class="col-6">
+        <img src="{%static 'header.jpg'%}" alt="" class="w-100">
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="bg-light container-fluid ">
+    <div class="d-flex gap-3 justify-content-around">
+       <ul class="nav nav-pill active">
+         <li class="nav-item">
+            <a class="nav-link" href="{% url "home" %}">All</a>
+         </li>
+        {% for brand in brands %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url "brands" brand.slug %}">{{brand.name}}</a>
+        </li>
+  {% endfor %}
+</ul>
+        
+        </div>
+    </div>
+    <div class=""> 
+        <h3>{{data | length}} result found</h3>
+        <div class="d-flex flex-wrap pt-5">
+            {% for d in data %}
+
+            <div class="col-sm-6">
+                <div class="card  mx-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <img class="card-img-top " src="{{d.image.url}}" alt="" />
+                        <h5 class="card-title">{{d.title}}</h5>
+                        <p class="card-text">{{ d.description | truncatewords:10 }}</p>
+
+                        <p>
+                            Price = {{d.price}}$ 
+                        </p>
+                        <p>
+                            Quantity = {{d.quantity}}
+                        </p>
+                        <p>
+                            Brand : 
+                            <button class="btn btn-primary m-2" disabled>
+                                {{d.brand.name}}
+                        </button>
+                        </p>
+                        <p><a class='text-decoration-none' href='{% url "detail" d.id %}'>View Details<a/></p>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock body %}
