@@ -14,6 +14,13 @@ from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 # Create your views here.
 
+def contact(req):
+    return render(req, 'contact.html')
+
+
+def about(req):
+    return render(req, 'about.html')
+
 
 def home(req, brand_slug=None):
     data = models.Car.objects.all()

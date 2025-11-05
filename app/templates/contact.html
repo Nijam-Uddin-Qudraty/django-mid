@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+
+<!-- Contact Hero Section -->
+<section class="contact-hero py-5 bg-dark">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold text-warning mb-4">Contact Us</h1>
+                <p class="lead text-light mb-4">Get in touch with our team. We're here to help you find your perfect vehicle and answer any questions.</p>
+                <p class="text-light">Our customer service team is available to assist you with vehicle inquiries, test drives, and any other support you may need.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="contact-image-container">
+                    <img src="https://images.unsplash.com/photo-1565689228864-0bfe44d3fcdc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Contact QCar" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Info Section -->
+<section class="contact-info py-5 bg-secondary">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-secondary bg-dark text-light">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-map-marker-alt fa-3x text-warning mb-3"></i>
+                        <h4 class="text-warning">Visit Our Showroom</h4>
+                        <p class="text-light">123 Automotive Avenue<br>City, State 12345<br>United States</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-secondary bg-dark text-light">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-phone fa-3x text-warning mb-3"></i>
+                        <h4 class="text-warning">Call Us</h4>
+                        <p class="text-light">Sales: (555) 123-4567<br>Service: (555) 123-4568<br>Support: (555) 123-4569</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-secondary bg-dark text-light">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-envelope fa-3x text-warning mb-3"></i>
+                        <h4 class="text-warning">Email Us</h4>
+                        <p class="text-light">sales@qcar.com<br>support@qcar.com<br>info@qcar.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="contact-form-section py-5 bg-dark">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-secondary bg-dark text-light">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-paper-plane fa-3x text-warning mb-3"></i>
+                            <h2 class="text-warning">Send Us a Message</h2>
+                            <p class="text-light">Fill out the form below and we'll get back to you within 24 hours.</p>
+                        </div>
+                        
+                        <form method="post" class="mt-4">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label text-light">First Name</label>
+                                        <input type="text" class="form-control dark-input" placeholder="Enter your first name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label text-light">Last Name</label>
+                                        <input type="text" class="form-control dark-input" placeholder="Enter your last name">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label text-light">Email Address</label>
+                                        <input type="email" class="form-control dark-input" placeholder="Enter your email">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label text-light">Phone Number</label>
+                                        <input type="tel" class="form-control dark-input" placeholder="Enter your phone number">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label text-light">Subject</label>
+                                        <select class="form-control dark-input">
+                                            <option value="">Select a subject</option>
+                                            <option value="sales">Vehicle Inquiry</option>
+                                            <option value="test-drive">Schedule Test Drive</option>
+                                            <option value="support">Customer Support</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label text-light">Message</label>
+                                        <textarea class="form-control dark-input" rows="5" placeholder="Enter your message"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-grid">
+                                        <button class="btn btn-warning btn-lg py-3 fw-bold" type="submit">
+                                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Business Hours Section -->
+<section class="hours-section py-5 bg-secondary">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card border-secondary bg-dark text-light">
+                    <div class="card-body p-4">
+                        <h3 class="text-warning text-center mb-4">Business Hours</h3>
+                        <div class="hours-list">
+                            <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                                <span class="text-light">Monday - Friday</span>
+                                <span class="text-warning">9:00 AM - 8:00 PM</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                                <span class="text-light">Saturday</span>
+                                <span class="text-warning">9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span class="text-light">Sunday</span>
+                                <span class="text-warning">11:00 AM - 5:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .contact-hero {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+    }
+    
+    .contact-image-container {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .contact-image-container:hover {
+        transform: translateY(-5px);
+    }
+    
+    .contact-info .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+    }
+    
+    .contact-info .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(255,193,7,0.1) !important;
+    }
+    
+    .contact-form-section .card {
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .contact-form-section .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255,193,7,0.1) !important;
+    }
+    
+    .dark-input {
+        background-color: #495057 !important;
+        border: 1px solid #6c757d !important;
+        color: #fff !important;
+        border-radius: 8px !important;
+        padding: 12px 15px !important;
+    }
+    
+    .dark-input:focus {
+        background-color: #495057 !important;
+        border-color: #ffc107 !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important;
+    }
+    
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+        border: none;
+        color: #000;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,193,7,0.3);
+        background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+    }
+    
+    .hours-section .card {
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+    
+    .hours-section .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(255,193,7,0.1) !important;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-hero .display-4 {
+            font-size: 2.5rem;
+        }
+        
+        .card-body {
+            padding: 2rem !important;
+        }
+    }
+</style>
+
+{% endblock body %}

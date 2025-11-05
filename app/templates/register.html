@@ -2,18 +2,205 @@
 {% load crispy_forms_tags %}
 {% block body %}
 
+<!-- Form Section -->
+<section class="form-section py-5 bg-dark">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow-lg border-secondary bg-dark text-light">
+                    <div class="card-body p-5">
+                        <!-- Form Header -->
+                        <div class="text-center mb-4">
+                            <div class="form-icon mb-3">
+                                {% if 'login' in type|lower %}
+                                <i class="fas fa-sign-in-alt fa-3x text-warning"></i>
+                                {% elif 'register' in type|lower %}
+                                <i class="fas fa-user-plus fa-3x text-warning"></i>
+                                {% elif 'update' in type|lower %}
+                                <i class="fas fa-edit fa-3x text-warning"></i>
+                                {% else %}
+                                <i class="fas fa-edit fa-3x text-warning"></i>
+                                {% endif %}
+                            </div>
+                            <h1 class="text-warning mb-2">{{type}} Page</h1>
+                            <p class="text-light">
+                                {% if 'login' in type|lower %}
+                                Welcome back! Please sign in to your account.
+                                {% elif 'register' in type|lower %}
+                                Join us today! Create your account to get started.
+                                {% elif 'update' in type|lower %}
+                                Update your profile information below.
+                                {% else %}
+                                Please fill out the form below.
+                                {% endif %}
+                            </p>
+                        </div>
 
-<form class="w-50 m-auto" method='post'>
-    {% csrf_token %}
-    <h1>{{type}} Page</h1>
-    {{form|crispy}}
-    <button class="btn btn-primary" type="submit">Submit</button>
+                        <!-- Form -->
+                        <form method="post" class="mt-4">
+                            {% csrf_token %}
+                            {{form|crispy}}
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-warning btn-lg py-3 fw-bold" type="submit">
+                                    {% if 'login' in type|lower %}
+                                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                    {% elif 'register' in type|lower %}
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                    {% elif 'update' in type|lower %}
+                                    <i class="fas fa-save me-2"></i>Update Profile
+                                    {% else %}
+                                    <i class="fas fa-paper-plane me-2"></i>Submit
+                                    {% endif %}
+                                </button>
+                            </div>
+                        </form>
 
+                        <!-- Additional Links -->
+                        <div class="text-center mt-4 pt-3 border-top border-secondary">
+                            {% if 'login' in type|lower %}
+                            <p class="text-light mb-2">Don't have an account?</p>
+                            <a href="{% url 'register' %}" class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-user-plus me-1"></i>Register Here
+                            </a>
+                            {% elif 'register' in type|lower %}
+                            <p class="text-light mb-2">Already have an account?</p>
+                            <a href="{% url 'login' %}" class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-sign-in-alt me-1"></i>Sign In Here
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-
-</form>
-
-
-
+<style>
+    .form-section {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card {
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255,193,7,0.1) !important;
+    }
+    
+    .form-icon {
+        opacity: 0.9;
+    }
+    
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+        border: none;
+        color: #000;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,193,7,0.3);
+        background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+    }
+    
+    .btn-outline-warning {
+        border-color: #ffc107;
+        color: #ffc107;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #000;
+        transform: translateY(-2px);
+    }
+    
+    /* Crispy Forms Dark Theme Override */
+    .form-control {
+        background-color: #495057 !important;
+        border: 1px solid #6c757d !important;
+        color: #fff !important;
+        border-radius: 8px !important;
+        padding: 12px 15px !important;
+    }
+    
+    .form-control:focus {
+        background-color: #495057 !important;
+        border-color: #ffc107 !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important;
+    }
+    
+    .form-label {
+        color: #fff !important;
+        font-weight: 500 !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .form-text {
+        color: #adb5bd !important;
+    }
+    
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    
+    .invalid-feedback {
+        color: #f8d7da !important;
+    }
+    
+    .is-valid {
+        border-color: #198754 !important;
+    }
+    
+    .valid-feedback {
+        color: #d1edff !important;
+    }
+    
+    /* Checkbox and Radio Styling */
+    .form-check-input {
+        background-color: #495057;
+        border: 1px solid #6c757d;
+    }
+    
+    .form-check-input:checked {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+    
+    .form-check-label {
+        color: #fff !important;
+    }
+    
+    /* Select Dropdown Styling */
+    select.form-control {
+        background-color: #495057 !important;
+        color: #fff !important;
+    }
+    
+    select.form-control option {
+        background-color: #495057;
+        color: #fff;
+    }
+    
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 2rem !important;
+        }
+        
+        .form-control {
+            padding: 10px 12px !important;
+        }
+    }
+</style>
 
 {% endblock body %}

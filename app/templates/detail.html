@@ -1,76 +1,231 @@
-{% extends "base.html" %} {% load crispy_forms_tags %} {% block body %}
+{% extends "base.html" %} 
+{% load crispy_forms_tags %} 
+{% block body %}
 
-<div class="container d-flex gap-2 p-3">
-    <div class="col-6">
-        <img
-            class="card-img"
-            src="{{ car.image.url }}"
-            alt=""
-            style="width: 100%"
-        />
-    </div>
-    <div class="col-6 card mx-2">
-        <div class="card-body">
-            <h5 class="card-title">{{ car.title }}</h5>
-            <p class="card-text">{{ car.description }}</p>
-            <p>Price = {{ car.price }}$</p>
-            <p>Quantity = {{ car.quantity }}</p>
-            <p>
-                Brand :
-                <button class="btn btn-primary m-2" disabled>
-                    {{ car.brand.name }}
-                </button>
-            </p>
-            {% if user.is_authenticated %}
-            <a class="btn btn-primary" href="{% url 'buy' car.id %}">Buy Now</a>
-            {% endif %}
-        </div>
-    </div>
-</div>
-
-<h3 class="m-2">Total Comments: {{ car.comments.all|length }}</h3>
-{% for comment in car.comments.all %}
-<div class="card mx-2">
-    <div class="card-body">
-        <p><strong>{{ comment.name }}</strong> - {{ comment.created_on }}</p>
-        <p>{{ comment.body }}</p>
-    </div>
-</div>
-{% endfor %}
-<form class="card-body mx-2" method="post">
-    <h2>Add Comment</h2>
-    {% csrf_token %} {{ form|crispy }}
-    <button class="btn btn-primary" type="submit">Submit Comment</button>
-</form>
-{% endblock body %}{% comment %} {% extends "base.html" %} {% block body %}
-
-<div class="d-flex flex-wrap pt-5">
-    {% for d in car %}
-
-    <div class="col-sm-12">
-        <div class="card mx-2">
-            <div class="card-body">
-                <img
-                    class="card-img"
-                    src="{{d.image.url}}"
-                    alt=""
-                    style="width: 50%"
-                />
-                <h5 class="card-title">{{d.title}}</h5>
-                <p class="card-text">{{d.description}}</p>
-                <p>Price = {{d.price}}$</p>
-                <p>Quantity = {{d.quantity}}</p>
-                <p>
-                    Brand :
-                    <button class="btn btn-primary m-2" disabled>
-                        {{d.brand.name}}
-                    </button>
-                </p>
+<!-- Car Detail Section -->
+<section class="car-detail-section py-5 bg-dark">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Car Image -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-secondary bg-dark">
+                    <div class="card-body p-0 position-relative">
+                        <img class="card-img-top detail-image" src="{{ car.image.url }}" alt="{{ car.title }}">
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-warning text-dark fs-6">{{ car.brand.name }}</span>
+                        </div>
+                        {% if car.quantity <= 2 %}
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-danger fs-6">Low Stock</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Car Details -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm border-secondary bg-dark text-white h-100">
+                    <div class="card-body">
+                        <h1 class="card-title text-warning mb-3">{{ car.title }}</h1>
+                        <p class="card-text text-light lead mb-4">{{ car.description }}</p>
+                        
+                        <div class="car-specs mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-secondary rounded">
+                                <span class="fw-bold text-white">Price:</span>
+                                <span class="price-tag fs-3 text-success">${{ car.price }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-secondary rounded">
+                                <span class="fw-bold text-white">Availability:</span>
+                                <span class="badge {% if car.quantity > 0 %}bg-success{% else %}bg-danger{% endif %} fs-6">
+                                    {{ car.quantity }} in stock
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center p-3 bg-secondary rounded">
+                                <span class="fw-bold text-white">Brand:</span>
+                                <span class="badge bg-primary fs-6">{{ car.brand.name }}</span>
+                            </div>
+                        </div>
+                        
+                        {% if user.is_authenticated and car.quantity > 0 %}
+                        <div class="d-grid">
+                            <a class="btn btn-warning btn-lg py-3 fw-bold" href="{% url 'buy' car.id %}">
+                                <i class="fas fa-shopping-cart me-2"></i>Buy Now
+                            </a>
+                        </div>
+                        {% elif not user.is_authenticated %}
+                        <div class="alert alert-dark border-warning text-dark">
+                            <i class="fas fa-info-circle me-2 text-warning"></i>
+                            Please <a href="{% url 'login' %}" class="alert-link text-primary">login</a> to purchase this vehicle.
+                        </div>
+                        {% else %}
+                        <div class="alert alert-dark border-warning text-light">
+                            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                            This vehicle is currently out of stock.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</section>
 
-    {% endfor %}
-</div>
+<!-- Comments Section -->
+<section class="comments-section py-5 bg-secondary">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Comments Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-warning">
+                        <i class="fas fa-comments me-2"></i>
+                        Customer Reviews
+                    </h2>
+                    <span class="badge bg-warning text-dark fs-6">
+                        {{ car.comments.all|length }} review{{ car.comments.all|length|pluralize }}
+                    </span>
+                </div>
 
-{% endblock body %} {% endcomment %}
+                <!-- Comments List -->
+                {% if car.comments.all %}
+                    {% for comment in car.comments.all %}
+                    <div class="card shadow-sm mb-3 border-secondary bg-dark text-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title text-warning mb-0">
+                                    <i class="fas fa-user me-2 text-warning"></i>
+                                    {{ comment.name }}
+                                </h5>
+                                <small class="text-light">
+                                    <i class="fas fa-clock me-1 text-warning"></i>
+                                    {{ comment.created_on|date:"F j, Y" }}
+                                </small>
+                            </div>
+                            <p class="card-text text-light mb-0">{{ comment.body }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-comment-slash fa-3x text-warning mb-3"></i>
+                        <h4 class="text-warning">No reviews yet</h4>
+                        <p class="text-light">Be the first to share your thoughts about this vehicle!</p>
+                    </div>
+                {% endif %}
+
+                <!-- Add Comment Form -->
+                <div class="card shadow-sm border-secondary bg-dark mt-4">
+                    <div class="card-body text-light">
+                        <h3 class="card-title text-warning mb-4">
+                            <i class="fas fa-edit me-2"></i>
+                            Add Your Review
+                        </h3>
+                        <form method="post">
+                            {% csrf_token %} 
+                            {{ form|crispy }}
+                            <div class="d-grid">
+                                <button class="btn btn-warning btn-lg py-2" type="submit">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Review
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .car-detail-section {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%) !important;
+    }
+    
+    .comments-section {
+        background: linear-gradient(135deg, #343a40 0%, #495057 100%) !important;
+    }
+    
+    .detail-image {
+        height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    
+    .price-tag {
+        color: #20c997;
+        font-weight: 700;
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(255,193,7,0.1) !important;
+        border-color: #ffc107 !important;
+    }
+    
+    .comments-section .card {
+        transition: none;
+    }
+    
+    .comments-section .card:hover {
+        transform: none;
+        box-shadow: 0 2px 10px rgba(255,193,7,0.1) !important;
+    }
+    
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+        border: none;
+        color: #000;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,193,7,0.3);
+        background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+    }
+    
+    .badge {
+        font-weight: 500;
+        padding: 8px 12px;
+    }
+    
+    /* Crispy Forms Dark Theme */
+    .form-control {
+        background-color: #495057;
+        border: 1px solid #6c757d;
+        color: #fff;
+    }
+    
+    .form-control:focus {
+        background-color: #495057;
+        border-color: #ffc107;
+        color: #fff;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    }
+    
+    .form-label {
+        color: #fff;
+    }
+    
+    .text-muted {
+        color: #adb5bd !important;
+    }
+    
+    @media (max-width: 768px) {
+        .detail-image {
+            height: 300px;
+        }
+        
+        .car-detail-section .card-body {
+            text-align: center;
+        }
+    }
+</style>
+
+{% endblock body %}

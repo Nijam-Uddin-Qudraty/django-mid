@@ -1,37 +1,201 @@
-{% extends "base.html" %} {% block body %}
+{% extends "base.html" %} 
+{% block body %}
 
-<h1>Profile</h1>
-<a href="update" class="btn btn-warning text-decoration-none"
-    >Update Profile
-</a>
-
-<h2>Order History</h2>
-
-<div class="col-10 d-flex flex-wrap pt-5">
-    {% if orders %} {% for order in orders %}
-    <div class="card mx-2" style="width: 18rem">
-        <div class="card-body">
-            <img
-                class="card-img"
-                src="{{ order.car.image.url }}"
-                alt=""
-                style="width: 50%"
-            />
-            <h5 class="card-title">{{ order.car.title }}</h5>
-            <p class="card-text">
-                {{ order.car.description|truncatewords:10 }}
-            </p>
-            <p>Price = {{ order.car.price }}$</p>
-            <p>
-                Brand :
-                <button class="btn btn-primary m-2" disabled>
-                    {{ order.car.brand.name }}
-                </button>
-            </p>
+<!-- Profile Header Section -->
+<section class="profile-header py-5 bg-dark">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="text-warning mb-3">
+                    <i class="fas fa-user-circle me-3"></i>Profile
+                </h1>
+                <p class="text-light lead">Welcome back! Manage your account and view your order history.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="update" class="btn btn-warning btn-lg px-4">
+                    <i class="fas fa-edit me-2"></i>Update Profile
+                </a>
+            </div>
         </div>
     </div>
-    {% endfor %}
-    {% else %}
-    <p>No orders yet.</p>
-</div>
-{% endif %} {% endblock body %}
+</section>
+
+<!-- Order History Section -->
+<section class="order-history py-5 bg-secondary">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-warning">
+                        <i class="fas fa-history me-2"></i>Order History
+                    </h2>
+                    <span class="badge bg-warning text-dark fs-6">
+                        {{ orders|length }} order{{ orders|length|pluralize }}
+                    </span>
+                </div>
+
+                {% if orders %}
+                <div class="row g-4">
+                    {% for order in orders %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card order-card h-100 shadow-sm border-secondary bg-dark">
+                            <div class="position-relative">
+                                <img class="card-img-top order-image" src="{{ order.car.image.url }}" alt="{{ order.car.title }}">
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-success">Purchased</span>
+                                </div>
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    <span class="badge bg-warning text-dark">{{ order.car.brand.name }}</span>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex flex-column text-light">
+                                <h5 class="card-title text-warning">{{ order.car.title }}</h5>
+                                <p class="card-text text-light flex-grow-1">
+                                    {{ order.car.description|truncatewords:15 }}
+                                </p>
+                                
+                                <div class="order-details mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-secondary rounded">
+                                        <span class="fw-bold">Price:</span>
+                                        <span class="text-success fw-bold">${{ order.car.price }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center p-2 bg-secondary rounded">
+                                        <span class="fw-bold">Order Date:</span>
+                                        <small class="text-light">{{ order.order_date|date:"M d, Y" }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <!-- Empty State -->
+                <div class="text-center py-5">
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-cart fa-4x text-warning mb-4"></i>
+                        <h3 class="text-warning mb-3">No Orders Yet</h3>
+                        <p class="text-light mb-4">You haven't placed any orders yet. Start exploring our collection!</p>
+                        <a href="{% url 'home' %}" class="btn btn-warning btn-lg px-4">
+                            <i class="fas fa-car me-2"></i>Browse Vehicles
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Account Stats Section -->
+<section class="account-stats py-4 bg-dark">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-3">
+                <div class="stat-card p-3 bg-secondary rounded">
+                    <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                    <h4 class="text-white">{{ orders|length }}</h4>
+                    <p class="text-light mb-0">Total Orders</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="stat-card p-3 bg-secondary rounded">
+                    <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                    <h4 class="text-white">Member</h4>
+                    <p class="text-light mb-0">Account Type</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="stat-card p-3 bg-secondary rounded">
+                    <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
+                    <h4 class="text-white">Active</h4>
+                    <p class="text-light mb-0">Account Status</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+        border-bottom: 3px solid #ffc107;
+    }
+    
+    .order-history {
+        background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+        min-height: 60vh;
+    }
+    
+    .order-card {
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .order-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(255,193,7,0.15) !important;
+        border-color: #ffc107 !important;
+    }
+    
+    .order-image {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .order-card:hover .order-image {
+        transform: scale(1.05);
+    }
+    
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+        border: none;
+        color: #000;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,193,7,0.3);
+        background: linear-gradient(135deg, #ffb300 0%, #ffa000 100%);
+    }
+    
+    .badge {
+        font-weight: 500;
+        padding: 8px 12px;
+    }
+    
+    .empty-state {
+        padding: 40px 20px;
+    }
+    
+    .stat-card {
+        transition: transform 0.3s ease;
+        border: 1px solid #495057;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: #ffc107;
+    }
+    
+    .account-stats {
+        border-top: 3px solid #495057;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-header .text-md-end {
+            text-align: left !important;
+            margin-top: 20px;
+        }
+        
+        .order-image {
+            height: 180px;
+        }
+    }
+</style>
+
+{% endblock body %}
